@@ -14,3 +14,5 @@ sat1 = Satellite("sat1",100)
 sat2 =Satellite("sat2",200)
 
 my_massage = Packet("how are you?",sat1,sat2)
+
+my_network.send(my_massage)
