@@ -10,11 +10,21 @@ my_massage = Packet("how are you?",sat1,sat2)
 
 earth = Satellite("Earth", 0)
 
+p_final = Packet("hello from earth!",sat1,sat2)
 
+p_earth_to_sat1 = RelayPacket(p_final,earth,sat1)
 
 
 try:
     attempt_transmission(my_massage)
+
+except BrokenConnectionError:
+    print("Transmission failed.")
+
+print("*"*20)
+
+try:
+    attempt_transmission(p_earth_to_sat1)
 
 except BrokenConnectionError:
     print("Transmission failed.")
