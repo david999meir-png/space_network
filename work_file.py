@@ -8,7 +8,7 @@ class Satellite(SpaceEntity):
         print(f"{self.name} received: {packet}")
 
 
-my_network = SpaceNetwork(level=1)
+my_network = SpaceNetwork(level=2)
 
 sat1 = Satellite("sat1",100)
 sat2 =Satellite("sat2",200)
