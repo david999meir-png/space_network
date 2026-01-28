@@ -11,6 +11,14 @@ class Satellite(SpaceEntity):
 class BrokenConnectionError(Exception):
     pass
 
+class RelayPacket(Packet):
+    def __init__(self, packet_to_relay, sender, proxi):
+        super().__init__(packet_to_relay,sender,proxi)
+
+    def __repr__(self):
+        return RelayPacket(f"railing[{self.data}] to {self.receiver} from {self.sender}")
+
+
 # פונקציה המוודאת שליחת הודעה תוך כדי טיפול בשגיאות
 def attempt_transmission(packet,network):
     while True:
