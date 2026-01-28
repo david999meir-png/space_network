@@ -34,5 +34,5 @@ def attempt_transmission(packet,network):
         except OutOfRangeError:
             print("Target out of range.")
             raise BrokenConnectionError
-            
+
 
