@@ -1,6 +1,6 @@
 import time
 
-from space_network_lib import SpaceEntity, SpaceNetwork,Packet
+from space_network_lib import SpaceEntity, SpaceNetwork,Packet,CommsError,TemporalInterferenceError,LinkTerminatedError,DataCorruptedError,OutOfRangeError
 from time import sleep
 
 class Satellite(SpaceEntity):
@@ -18,5 +18,19 @@ sat2 =Satellite("sat2",200)
 
 my_massage = Packet("how are you?",sat1,sat2)
 
-my_network.send(my_massage)
 
+
+def attempt_transmission(packet):
+    while True:
+        try:
+            my_network.send(my_massage)
+            break
+        except TemporalInterferenceError:
+            print("interference, waiting...")
+            time.sleep(2)
+            continue
+        except DataCorruptedError:
+            print("data corrupted, retrying...")
+            continue
+
+attempt_transmission(my_massage)
