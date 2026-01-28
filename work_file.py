@@ -8,6 +8,8 @@ class Satellite(SpaceEntity):
     def receive_signal(self, packet: Packet):
         print(f"{self.name} received: {packet}")
 
+class BrokenConnectionError(Exception):
+    pass
 
 # פונקציה המוודאת שליחת הודעה תוך כדי טיפול בשגיאות
 def attempt_transmission(packet,network):
@@ -15,17 +17,21 @@ def attempt_transmission(packet,network):
         try:
             network.send(packet)
             break
+
         except TemporalInterferenceError:
             print("interference, waiting...")
             time.sleep(2)
             continue
+
         except DataCorruptedError:
             print("data corrupted, retrying...")
             continue
+
         except LinkTerminatedError as e:
             print("link lost.")
             print(e)
             break
+
         except OutOfRangeError as e:
             print("Target out of range.")
             print(e)
