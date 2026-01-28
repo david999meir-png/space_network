@@ -9,10 +9,7 @@ class Satellite(SpaceEntity):
         print(f"{self.name} received: {packet}")
 
 
-
-
-
-
+# פונקציה המוודאת שליחת הודעה תוך כדי טיפול בשגיאות
 def attempt_transmission(packet,network):
     while True:
         try:
