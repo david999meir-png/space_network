@@ -2,7 +2,7 @@ from space_network_lib import SpaceEntity, SpaceNetwork,Packet,CommsError,Tempor
 from work_file import Satellite,attempt_transmission
 
 
-my_network = SpaceNetwork(level=2)
+my_network = SpaceNetwork(level=3)
 
 sat1 = Satellite("sat1",100)
 sat2 =Satellite("sat2",200)
