@@ -1,4 +1,5 @@
-from space_network_lib import SpaceEntity, SpaceNetwork,Packet
+import time
+from space_network_lib import SpaceEntity, SpaceNetwork,Packet,CommsError,TemporalInterferenceError,LinkTerminatedError,DataCorruptedError,OutOfRangeError
 
 class Satellite(SpaceEntity):
     def __init__(self,name, distance_from_earth):
@@ -8,11 +9,20 @@ class Satellite(SpaceEntity):
         print(f"{self.name} received: {packet}")
 
 
-my_network = SpaceNetwork(level=1)
 
-sat1 = Satellite("sat1",100)
-sat2 =Satellite("sat2",200)
 
-my_massage = Packet("how are you?",sat1,sat2)
 
-my_network.send(my_massage)
+
+def attempt_transmission(packet,network):
+    while True:
+        try:
+            network.send(packet)
+            break
+        except TemporalInterferenceError:
+            print("interference, waiting...")
+            time.sleep(2)
+            continue
+        except DataCorruptedError:
+            print("data corrupted, retrying...")
+            continue
+
