@@ -1,4 +1,7 @@
+import time
+
 from space_network_lib import SpaceEntity, SpaceNetwork,Packet
+from time import sleep
 
 class Satellite(SpaceEntity):
     def __init__(self,name, distance_from_earth):
@@ -16,3 +19,4 @@ sat2 =Satellite("sat2",200)
 my_massage = Packet("how are you?",sat1,sat2)
 
 my_network.send(my_massage)
+
