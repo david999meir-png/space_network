@@ -8,6 +8,11 @@ sat2 =Satellite("sat2",200)
 
 my_massage = Packet("how are you?",sat1,sat2)
 
+earth = Satellite("Earth", 0)
+
+
+
+
 try:
     attempt_transmission(my_massage)
 
