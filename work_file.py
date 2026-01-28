@@ -22,4 +22,12 @@ def attempt_transmission(packet,network):
         except DataCorruptedError:
             print("data corrupted, retrying...")
             continue
+        except LinkTerminatedError as e:
+            print("link lost.")
+            print(e)
+            break
+        except OutOfRangeError as e:
+            print("Target out of range.")
+            print(e)
+            break
 
