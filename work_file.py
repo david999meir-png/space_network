@@ -5,17 +5,34 @@ class Satellite(SpaceEntity):
     def __init__(self,name, distance_from_earth):
         super().__init__(name,distance_from_earth)
 
+
     def receive_signal(self, packet: Packet):
-        print(f"{self.name} received: {packet}")
+        if isinstance(packet,RelayPacket):
+            print(f"Unwrapping and forwarding to {packet.receiver}")
+            packet = packet.data
+            attempt_transmission(packet)
+        else:
+            print(f"Final destination reached: {packet.data}")
 
 class BrokenConnectionError(Exception):
     pass
 
+my_network = SpaceNetwork(level=3)
+
+
+class RelayPacket(Packet):
+    def __init__(self, packet_to_relay, sender, proxi):
+        super().__init__(packet_to_relay,sender,proxi)
+
+    def __repr__(self):
+        return RelayPacket(f"railing[{self.data}] to {self.receiver} from {self.sender}")
+
+
 # פונקציה המוודאת שליחת הודעה תוך כדי טיפול בשגיאות
-def attempt_transmission(packet,network):
+def attempt_transmission(packet):
     while True:
         try:
-            network.send(packet)
+            my_network.send(packet)
             break
 
         except TemporalInterferenceError:
