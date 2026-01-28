@@ -1,8 +1,7 @@
 from space_network_lib import SpaceEntity, SpaceNetwork,Packet,CommsError,TemporalInterferenceError,LinkTerminatedError,DataCorruptedError,OutOfRangeError
-from work_file import Satellite,attempt_transmission,BrokenConnectionError
+from work_file import Satellite,attempt_transmission,BrokenConnectionError,RelayPacket
 
 
-my_network = SpaceNetwork(level=3)
 
 sat1 = Satellite("sat1",100)
 sat2 =Satellite("sat2",200)
@@ -10,7 +9,7 @@ sat2 =Satellite("sat2",200)
 my_massage = Packet("how are you?",sat1,sat2)
 
 try:
-    attempt_transmission(my_massage,my_network)
+    attempt_transmission(my_massage)
 
 except BrokenConnectionError:
     print("Transmission failed.")
