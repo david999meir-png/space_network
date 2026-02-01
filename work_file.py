@@ -53,3 +53,16 @@ def attempt_transmission(packet):
             raise BrokenConnectionError
 
 
+def smart_send_packet(spaces:list, massage:Packet):
+    sender = massage.sender
+    receiver = massage.receiver
+    for space in spaces:
+        if receiver.distance_from_earth - sender.distance_from_earth >= 150:
+            if abs(space.distance_from_earth - receiver.distance_from_earth) >= 150:
+                continue
+            else:
+                massage = RelayPacket(massage,space,receiver)
+                receiver = space
+        else:
+            break
+    RelayPacket(massage,sender,receiver)

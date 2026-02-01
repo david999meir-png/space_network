@@ -1,5 +1,5 @@
 from space_network_lib import SpaceEntity, SpaceNetwork,Packet,CommsError,TemporalInterferenceError,LinkTerminatedError,DataCorruptedError,OutOfRangeError
-from work_file import Satellite,attempt_transmission,BrokenConnectionError,RelayPacket
+from work_file import Satellite,attempt_transmission,BrokenConnectionError,RelayPacket, smart_send_packet
 
 
 earth = Satellite("Earth", 0)
@@ -20,6 +20,13 @@ try:
 
 except BrokenConnectionError:
     print("Transmission failed.")
+
+
+
+
+
+
+
 
 # try:
 #     attempt_transmission(my_massage)
