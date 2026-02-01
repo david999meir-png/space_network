@@ -25,7 +25,7 @@ class RelayPacket(Packet):
         super().__init__(packet_to_relay,sender,proxi)
 
     def __repr__(self):
-        return RelayPacket(f"railing[{self.data}] to {self.receiver} from {self.sender}")
+        return f"RelayPacket(Relaying[{self.data}] to {self.receiver.name} via {self.sender.name})"
 
 
 # פונקציה המוודאת שליחת הודעה תוך כדי טיפול בשגיאות
@@ -53,16 +53,30 @@ def attempt_transmission(packet):
             raise BrokenConnectionError
 
 
-def smart_send_packet(spaces:list, massage:Packet):
+def smart_send_packet(spaces: list, massage: Packet):
     sender = massage.sender
     receiver = massage.receiver
-    for space in spaces:
-        if receiver.distance_from_earth - sender.distance_from_earth >= 150:
-            if abs(space.distance_from_earth - receiver.distance_from_earth) >= 150:
-                continue
-            else:
-                massage = RelayPacket(massage,space,receiver)
-                receiver = space
-        else:
-            break
-    RelayPacket(massage,sender,receiver)
+    def get_dist(s):
+        return s.distance_from_earth
+    spaces.sort(key=get_dist)
+
+    path = []
+    start_p = min(sender.distance_from_earth, receiver.distance_from_earth)
+    end_p = max(sender.distance_from_earth, receiver.distance_from_earth)
+    for s in spaces:
+        if start_p < s.distance_from_earth < end_p:
+            path.append(s)
+
+    if sender.distance_from_earth > receiver.distance_from_earth:
+        path.reverse()
+
+    if len(path) > 0:
+        massage.sender = path[-1]
+    path.reverse()
+    current_target = receiver
+    
+    for space in path:
+        massage = RelayPacket(massage, space, current_target)
+        current_target = space
+    new_massage = RelayPacket(massage, sender, current_target)
+    attempt_transmission(new_massage)
