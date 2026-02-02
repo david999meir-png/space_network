@@ -74,9 +74,18 @@ def smart_send_packet(spaces: list, massage: Packet):
         massage.sender = path[-1]
     path.reverse()
     current_target = receiver
-    
+
     for space in path:
         massage = RelayPacket(massage, space, current_target)
         current_target = space
     new_massage = RelayPacket(massage, sender, current_target)
     attempt_transmission(new_massage)
+
+
+
+# הצפנת פקטות
+class EncryptedPacket(Packet):
+    def __init__(self,key,data,sender, receiver):
+        super().__init__(data,sender,receiver)
+        self.__key = key
+
