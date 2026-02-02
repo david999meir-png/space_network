@@ -91,4 +91,21 @@ class EncryptedPacket(Packet):
     def __init__(self,key,data,sender, receiver):
         super().__init__(data,sender,receiver)
         self.__key = key
+        temp_massage =""
+        for i, v in enumerate(self.data):
+            temp_word = ord(v) ^ ord(self.__key[i % len(self.__key)])
+            temp_massage += chr(temp_word)
+        self.data = temp_massage
+
+
+    def decrypt(self,key):
+        if key == self.__key:
+            real_massage = ""
+            for i, v in enumerate(self.data):
+                temp = ord(v) ^ ord(self.__key[i % len(self.__key)])
+                real_massage += chr(temp)
+            return real_massage
+        else:
+            raise SecurityBreachError("key value not good!")
+
 
