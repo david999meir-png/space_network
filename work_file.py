@@ -2,7 +2,7 @@ import time
 from space_network_lib import SpaceEntity, SpaceNetwork,Packet,CommsError,TemporalInterferenceError,LinkTerminatedError,DataCorruptedError,OutOfRangeError
 
 class Satellite(SpaceEntity):
-    def __init__(self,name, distance_from_earth):
+    def __init__(self,name, distance_from_earth, key = "apolo"):
         super().__init__(name,distance_from_earth)
 
 
