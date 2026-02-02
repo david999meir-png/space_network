@@ -2,7 +2,7 @@ import time
 from space_network_lib import SpaceEntity, SpaceNetwork,Packet,CommsError,TemporalInterferenceError,LinkTerminatedError,DataCorruptedError,OutOfRangeError
 
 class Satellite(SpaceEntity):
-    def __init__(self,name, distance_from_earth):
+    def __init__(self,name, distance_from_earth, key = "apolo"):
         super().__init__(name,distance_from_earth)
 
 
@@ -15,6 +15,9 @@ class Satellite(SpaceEntity):
             print(f"Final destination reached: {packet.data}")
 
 class BrokenConnectionError(Exception):
+    pass
+
+class SecurityBreachError(Exception):
     pass
 
 my_network = SpaceNetwork(level=3)
@@ -74,9 +77,35 @@ def smart_send_packet(spaces: list, massage: Packet):
         massage.sender = path[-1]
     path.reverse()
     current_target = receiver
-    
+
     for space in path:
         massage = RelayPacket(massage, space, current_target)
         current_target = space
     new_massage = RelayPacket(massage, sender, current_target)
     attempt_transmission(new_massage)
+
+
+
+# הצפנת פקטות
+class EncryptedPacket(Packet):
+    def __init__(self,key,data,sender, receiver):
+        super().__init__(data,sender,receiver)
+        self.__key = key
+        temp_massage =""
+        for i, v in enumerate(self.data):
+            temp_word = ord(v) ^ ord(self.__key[i % len(self.__key)])
+            temp_massage += chr(temp_word)
+        self.data = temp_massage
+
+
+    def decrypt(self,key):
+        if key == self.__key:
+            real_massage = ""
+            for i, v in enumerate(self.data):
+                temp = ord(v) ^ ord(self.__key[i % len(self.__key)])
+                real_massage += chr(temp)
+            return real_massage
+        else:
+            raise SecurityBreachError("key value not good!")
+
+
