@@ -17,6 +17,9 @@ class Satellite(SpaceEntity):
 class BrokenConnectionError(Exception):
     pass
 
+class SecurityBreachError(Exception):
+    pass
+
 my_network = SpaceNetwork(level=3)
 
 
